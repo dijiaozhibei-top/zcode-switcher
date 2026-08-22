@@ -73,7 +73,9 @@ pub fn scan_zcode_shortcuts() -> R<Vec<ShortcutInfo>> {
 pub fn find_preferred_shortcut() -> Option<ShortcutInfo> {
     let list = scan_zcode_shortcuts().unwrap_or_default();
     // 优先带 flag 的；没有再退到任意一个
-    list.iter().find(|s| s.has_flag).cloned()
+    list.iter()
+        .find(|s| s.has_flag)
+        .cloned()
         .or_else(|| list.into_iter().next())
 }
 
@@ -114,8 +116,8 @@ mod win {
     };
     use windows::Win32::UI::Shell::{IShellLinkW, ShellLink};
 
-    use super::{LauncherBackup, ShortcutInfo, REMOTE_DEBUGGING_FLAG};
     use super::{backup_file, load_backup, save_backup};
+    use super::{LauncherBackup, ShortcutInfo, REMOTE_DEBUGGING_FLAG};
     use crate::profile::AppError;
 
     type R<T> = std::result::Result<T, AppError>;
@@ -208,8 +210,7 @@ mod win {
     fn read_shortcut(lnk_path: &Path) -> windows::core::Result<(String, String)> {
         ensure_com_init();
         unsafe {
-            let link: IShellLinkW =
-                CoCreateInstance(&ShellLink, None, CLSCTX_INPROC_SERVER)?;
+            let link: IShellLinkW = CoCreateInstance(&ShellLink, None, CLSCTX_INPROC_SERVER)?;
             let persist: IPersistFile = link.cast()?;
 
             let lnk_wide = to_wide(&lnk_path.to_string_lossy());
@@ -232,8 +233,7 @@ mod win {
     fn write_shortcut_arguments(lnk_path: &Path, args: &str) -> windows::core::Result<()> {
         ensure_com_init();
         unsafe {
-            let link: IShellLinkW =
-                CoCreateInstance(&ShellLink, None, CLSCTX_INPROC_SERVER)?;
+            let link: IShellLinkW = CoCreateInstance(&ShellLink, None, CLSCTX_INPROC_SERVER)?;
             let persist: IPersistFile = link.cast()?;
 
             let lnk_wide = to_wide(&lnk_path.to_string_lossy());

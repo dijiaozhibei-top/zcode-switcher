@@ -140,9 +140,7 @@ async fn pick_zcode_page() -> Option<String> {
     targets
         .into_iter()
         .find(|t| {
-            t.target_type == "page"
-                && t.title == "ZCode"
-                && t.url.contains("renderer/index.html")
+            t.target_type == "page" && t.title == "ZCode" && t.url.contains("renderer/index.html")
         })
         .map(|t| t.ws_url)
 }
