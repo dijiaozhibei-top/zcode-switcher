@@ -8,8 +8,8 @@ export interface Glm52PoolStats {
   totalUnits: number;
 }
 
-// 命名 glm52 为历史遗留：ZCode 现仅提供 GLM-5.3，此处匹配任意 GLM-5.x 条目，
-// 且优先取 5.3；GLM-5-Turbo 是独立额度池，不在匹配范围内。
+// 命名 glm52 为历史遗留：ZCode 现仅提供 GLM-5.3-Flash，此处匹配任意 GLM-5.x 条目，
+// 且优先取 5.3（含 5.3-Flash 变体，子串匹配即可命中）；GLM-5-Turbo 是独立额度池，不在匹配范围内。
 export function findGlm52Balance(quota?: QuotaInfo): BalanceItem | undefined {
   const balances = quota?.balances ?? [];
   return (

@@ -41,7 +41,7 @@ There is no test suite and no ESLint config; `npm run build` (tsc) + `cargo chec
 
 ## Known gotchas
 
-- **GLM-5.3（2026-08 起唯一模型）**：ZCode 已下线 GLM-5.2，仅提供 GLM-5.3。代码中 `glm52`/`Glm52` 标识符（函数名、store 字段、i18n key、`zcs:glm52*` localStorage key）是历史命名，**不要重命名**——localStorage key 变了会丢用户设置。实际匹配逻辑在 `src/lib/glm52.ts`：优先取 `glm-5.3` 条目，兜底任意 `glm-5.x`（不含 GLM-5-Turbo）。本地代理（`proxy.rs`）的 provider 声明、默认模型、`/v1/models` 端点均已是 GLM-5.3；`normalize_zcode_model` 中保留 `glm-5.2` 映射仅为兼容旧请求。下次模型升级到 5.4 时，改 `glm52.ts` 的优先匹配串、`proxy.rs` 的四处模型名、三语 i18n 文案即可。
+- **GLM-5.3-Flash（2026-08 起唯一模型）**：ZCode 已下线 GLM-5.2/GLM-5.3，仅提供 GLM-5.3-Flash。代码中 `glm52`/`Glm52` 标识符（函数名、store 字段、i18n key、`zcs:glm52*` localStorage key）是历史命名，**不要重命名**——localStorage key 变了会丢用户设置。实际匹配逻辑在 `src/lib/glm52.ts`：优先取含 `glm-5.3` 的条目（Flash 变体被子串命中），兜底任意 `glm-5.x`（不含 GLM-5-Turbo）。本地代理（`proxy.rs`）的 provider 声明、默认模型、`/v1/models` 端点均已是 GLM-5.3-Flash；`normalize_zcode_model` 把旧模型名 `glm-5.2`/`glm-5.3` 重定向到 `GLM-5.3-Flash`，兼容旧配置请求。下次模型升级（如 5.4）时，改 `glm52.ts` 的优先匹配串、`proxy.rs` 的 provider/默认模型//v1/models/normalize 四处、三语 i18n 文案即可。
 - `src/components/FloatingCapsule.tsx`、`src-tauri/src/zcode_cdp.rs`、`src-tauri/src/zcode_launcher.rs` 曾在 Release 1.1.7（commit 594d77d）被误删而引用未清（2026-08 已从 `594d77d^` 恢复）。若检出旧提交编译失败，可从该提交的父提交取回这三个文件。
 - package.json scripts `notice:preview`, `notice:check`, and `build:captcha-runtime` reference `scripts/preview-notice.mjs` / `scripts/prepare-captcha-runtime.cjs` that were never committed — these npm scripts fail. Ignore the `npm run notice:check` step in the publish guide.
 - `docs/development.md`'s macOS section is stale (references `build-macos.yml`, `tauri.macos.conf.json`, `docs/macos.md` that don't exist). `docs/release.md` is the current macOS story.
